@@ -65,7 +65,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                 messageLineHeight: "20px",
                 backgroundColor: "rgb(255,153,102)",
                 position: "topRight", 
-                image: './img/bi_x-octagon.svg',
+                image: './img/octagon.svg',
                 imageWidth: 30,
                  });
                  // добавити скруглення для iziToast
@@ -127,8 +127,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                  //0 Перевірте завантаження всіх зображень
            const images = userList.querySelectorAll('img');
             let loadedImagesCount = 0;
-// ???????? ЯК ЗРОБИТИ ЩОБ forEach ПЕРЕВІРЯВ ЗАВЕРШЕННЯ ЗАВАНТАЖЕННЯ КАРТИНОК 
-// ПРИ ЗАВЕРШЕННІ ВИКОНУВАЛАСЬ ФУНКЦІЯ ПЕРЕВІРКИ РОЗМІРУ КАРТКИ(ДОБАВИТИ async/awaitv??)
+
             images.forEach(img => {
                 if (img.complete) {
                     // 
