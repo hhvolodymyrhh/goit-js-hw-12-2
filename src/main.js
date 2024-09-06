@@ -210,12 +210,10 @@ btnMorePosts.addEventListener("click", (event) => {
             //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
                     const elem = document.querySelector(".gallery-list-item");
                 const rect = elem.getBoundingClientRect().height * 2;
-   
-         window.scrollBy({
+            //    console.log(rect)
+               window.scrollBy({
                 top: rect,
                 behavior: "smooth",
                });
-    
-              
 });
 
