@@ -3,8 +3,6 @@ import { glob } from 'glob';
 import injectHTML from 'vite-plugin-html-inject';
 import FullReload from 'vite-plugin-full-reload';
 import SortCss from 'postcss-sort-media-queries';
-import react from '@vitejs/plugin-react';
-import svgrPlugin from 'vite-plugin-svgr';
 
 export default defineConfig(({ command }) => {
   return {
@@ -45,13 +43,6 @@ export default defineConfig(({ command }) => {
       SortCss({
         sort: 'mobile-first',
       }),
-      react(),
-    svgrPlugin({
-      include: '**/*.svg',
-      svgrOptions: {
-        exportType: 'default',
-      },
-    }),
     ],
   };
 });
