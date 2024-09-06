@@ -56,7 +56,8 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
     
     const comingsImg = await gettingData(InputSearch, pageGrowthJs)
     try {              
-           if (comingsImg.hits.length === 0) {
+        if (comingsImg.hits.length === 0) {
+               btnMorePosts.style.display = 'none';
                 //попередження .......IZITOST.......
                 //alert("Sorry, there are no images matching your search query. Please try again!");
                  iziToast.show({
@@ -158,21 +159,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                         } 
                     });
                 }
-                
-
             });
-               // ==============================================================
-            //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
-                    const elem = document.querySelector(".gallery-list-item");
-                const rect = elem.getBoundingClientRect().height * 2;
-               console.log(rect)
-               window.scrollBy({
-                top: rect,
-                behavior: "smooth",
-               });
-               window.scrollBy(0, rect);
-
-
              }
         }
         catch (error) {
@@ -202,7 +189,8 @@ gettingUserForm.addEventListener("submit", (event) => {
     pageGrowthJs = 1;
     inputSearchListener = event.currentTarget.elements.search.value.toLowerCase().trim();
     
-      if (!inputSearchListener) {
+    if (!inputSearchListener) {
+          btnMorePosts.style.display = 'none';
         return
     };
     addImage(inputSearchListener, pageGrowthJs, event); 
@@ -218,5 +206,14 @@ btnMorePosts.addEventListener("click", (event) => {
         return
     };
     addImage(inputSearchListener, pageGrowthJs); 
-    
+    // ==============================================================
+            //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
+                    const elem = document.querySelector(".gallery-list-item");
+                const rect = elem.getBoundingClientRect().height * 2;
+            //    console.log(rect)
+               window.scrollBy({
+                top: rect,
+                behavior: "smooth",
+               });
 });
+
