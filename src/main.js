@@ -12,6 +12,8 @@ import { renderData } from './js/render-functions.js';
 //ВСТАВКА ШЛЯХУ ДЛЯ ІЗІТОСТ ЩОБ РОБИЛА
 import clipPath from "./img/octagon.svg"
 
+import ExternalLink from './img/octagon.svg';
+
 
 // ключ що прриходить на https://pixabay.com
 
@@ -68,7 +70,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                 messageLineHeight: "20px",
                 backgroundColor: "rgb(255,153,102)",
                 position: "topRight", 
-                image: clipPath,
+                image: ExternalLink,
                 imageWidth: 30,
                  });
                  // добавити скруглення для iziToast
