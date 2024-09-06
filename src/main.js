@@ -65,7 +65,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                 messageLineHeight: "20px",
                 backgroundColor: "rgb(255,153,102)",
                 position: "topRight", 
-                image: './img/octagon.svg',
+                image: '/img/octagon.svg',
                 imageWidth: 30,
                  });
                  // добавити скруглення для iziToast
@@ -182,6 +182,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
 //слухач для сабміту прибера дефолтні події лічильньник сторінки поверта до 1 по значенню з інпуту створює сторінку додає лічильник сторінки відобража кнопку додавання інших сторінок 
 gettingUserForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    userList.innerHTML = '';
     btnMorePosts.style.display = 'none';
     pageGrowthJs = 1;
     inputSearchListener = event.currentTarget.elements.search.value.toLowerCase().trim();
@@ -205,13 +206,13 @@ btnMorePosts.addEventListener("click", async(event) => {
     };
     await addImage(inputSearchListener, pageGrowthJs); 
     // ==============================================================
-            //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
-                    const elem = document.querySelector(".gallery-list-item");
-                const rect = elem.getBoundingClientRect().height * 2;
-            //    console.log(rect)
-               window.scrollBy({
-                top: rect,
-                behavior: "smooth",
-               });
+            //ПРОКРУТКА
+    const elem = document.querySelector(".gallery-list-item");
+    const rect = elem.getBoundingClientRect().height * 2;
+           
+    window.scrollBy({
+    top: rect,
+    behavior: "smooth",
+    });
 });
 
