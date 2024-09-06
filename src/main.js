@@ -20,17 +20,25 @@ const firstHtml =
 `<div class="container">
     <form class="formFetchEl">
 		<input type="text" class="search-input" name="search" />
-		<button class="btnEl">Search</button>
+		<button type="submit" class="btnEl">Search</button>
     </form>
     <span class="loader">Loading</span>
 	  <ul class="galleryEl"></ul>
+      <span class="loader-more">Loading</span>
+      <button type="button" class="btnMorePostsEl">Load more</button>
 </div>`;
 
 bodySelect.insertAdjacentHTML("afterbegin", firstHtml)
-//0 завантажувач
+//0 завантажувач кнопка
 const loader = document.querySelector(".loader");
- //0 прибирання з виду завантажувача
+const loaderMore = document.querySelector(".loader-more");
+const btnMorePosts = document.querySelector(".btnMorePostsEl");
+const input = document.querySelector(".search-input");
+ //0 прибирання з виду завантажувача кнопки
 loader.style.display = 'none';
+btnMorePosts.style.display = 'none';
+loaderMore.style.display = 'none';
+
 // створення вигляду для бібліотеки що відкрива картинки                  
 let gallery = new SimpleLightbox('.galleryEl a', {
                     caption: true,
@@ -41,23 +49,14 @@ let gallery = new SimpleLightbox('.galleryEl a', {
 //2 функія для отримання фото
 const gettingUserForm = document.querySelector("form");
 const userList = document.querySelector(".galleryEl");
+let pageGrowthJs = 1;
+let inputSearchListener;
 
-gettingUserForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+async function addImage(InputSearch, pageGrowthJs, eventCome) {
     
-    const thisInputSearch = event.currentTarget.elements.search.value.toLowerCase().trim();
-    
-   /*
-      if (!thisInputSearch) {
-        return
-    };
-    */
-
-    gettingData(thisInputSearch)
-        .then((comingsImg) => {
-            console.log(comingsImg.data)
-                
-           if (comingsImg.data.hits.length === 0) {
+    const comingsImg = await gettingData(InputSearch, pageGrowthJs)
+    try {              
+           if (comingsImg.hits.length === 0) {
                 //попередження .......IZITOST.......
                 //alert("Sorry, there are no images matching your search query. Please try again!");
                  iziToast.show({
@@ -80,44 +79,103 @@ gettingUserForm.addEventListener("submit", (event) => {
                 iziToastImgStyle.style.left = "10px";
                  
             } else {
-
-
-                //очистка попереднього вмісту карток та створення нових ".galleryEl"                
-                userList.innerHTML = '';
-                //0 завантажувач видимий
+               //очистка попереднього вмісту карток та створення нових ".galleryEl" для сабміту
+               if (eventCome?.type === "submit") {
+                   userList.innerHTML = '';
+                   //0 завантажувач видимий
                     loader.style.display = 'block';
-                renderData(comingsImg.hits, userList);
+               } else {
+                  loaderMore.style.display = 'block';
+                   }
+                
+               renderData(comingsImg.hits, userList);
+            //    console.log(comingsImg)
+               //_______прибирання кнопки та повідомлення при кількості постів______
+               const li = userList.querySelectorAll('li');
+               if (comingsImg.totalHits <= li.length) {
+                   
+                    //попередження .......IZITOST.......
+                 iziToast.show({
+                message: "We're sorry, but you've reached the end of search results.",
+                messageColor: "#000",
+                messageSize: "18px",
+                messageLineHeight: "20px",
+                backgroundColor: "rgb(37, 150, 190)",
+                position: "topRight", 
+                 });
+                 // добавити стилі для iziToast
+                   const iziToastElStyle = document.querySelector(".iziToast");
+                   iziToastElStyle.style.borderRadius = '10px';
+                   iziToastElStyle.style.overflow = 'hidden';
+                   const iziToastEl = document.querySelector(".iziToast-wrapper");
+                    iziToastEl.style.position = 'fixed';
+        
+
+                   btnMorePosts.style.display = 'none';
+                   // Сховати індикатор завантаження після завантаження всіх картинок
+                        if (eventCome?.type === "submit") {
+                        //0 завантажувач невидимий
+                        loader.style.display = 'none';
+                        } else {
+                        loaderMore.style.display = 'none';
+                        }
+               return
+               }
                  
-                   //метод для оновлення бібліотеки
-                gallery.refresh() 
+                   //метод для оновлення бібліотеки для асинхрону
+               gallery.refresh() 
+               
                  //0 Перевірте завантаження всіх зображень
            const images = userList.querySelectorAll('img');
             let loadedImagesCount = 0;
-
+// ???????? ЯК ЗРОБИТИ ЩОБ forEach ПЕРЕВІРЯВ ЗАВЕРШЕННЯ ЗАВАНТАЖЕННЯ КАРТИНОК 
+// ПРИ ЗАВЕРШЕННІ ВИКОНУВАЛАСЬ ФУНКЦІЯ ПЕРЕВІРКИ РОЗМІРУ КАРТКИ(ДОБАВИТИ async/awaitv??)
             images.forEach(img => {
                 if (img.complete) {
+                    // 
+                    // console.log(img.complete)
                     loadedImagesCount++;
                     if (loadedImagesCount === images.length) {
                         // Сховати індикатор завантаження після завантаження всіх картинок
+                        if (eventCome?.type === "submit") {
+                        //0 завантажувач невидимий
                         loader.style.display = 'none';
+                        } else {
+                        loaderMore.style.display = 'none';
+                        }
                     } 
                 } else {
                     img.addEventListener('load', () => {
                         loadedImagesCount++;
                         if (loadedImagesCount === images.length) {
                             // Сховати індикатор завантаження після завантаження всіх картинок
+                            if (eventCome?.type === "submit") {
+                        
                             loader.style.display = 'none';
+                            } else {
+                            loaderMore.style.display = 'none';
+                            }
                         } 
                     });
                 }
-            });//0
+                
+
+            });
+               // ==============================================================
+            //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
+                    const elem = document.querySelector(".gallery-list-item");
+                const rect = elem.getBoundingClientRect().height * 2;
+               console.log(rect)
+               window.scrollBy({
+                top: rect,
+                behavior: "smooth",
+               });
+               window.scrollBy(0, rect);
 
 
              }
-            
-
-        })
-        .catch((error) => {
+        }
+        catch (error) {
             //попередження .......IZITOST.......
                 //alert(`Sorry, ${error}. Please try again!`);
                  iziToast.show({
@@ -129,8 +187,36 @@ gettingUserForm.addEventListener("submit", (event) => {
                 position: "topRight",              
                  });
                  // добавити скруглення для iziToast
-            const iziToastElStyle = document.querySelector(".iziToast");
-            iziToastElStyle.style.borderRadius = '10px';
-                iziToastElStyle.style.overflow = 'hidden';
-        }) 
+                    const iziToastElStyle = document.querySelector(".iziToast");
+                    iziToastElStyle.style.borderRadius = '10px';
+                    const iziToastEl = document.querySelector(".iziToast-wrapper");
+                    iziToastEl.style.position = 'fixed';
+                    iziToastElStyle.style.overflow = 'hidden';
+    } 
+}
+
+//слухач для сабміту прибера дефолтні події лічильньник сторінки поверта до 1 по значенню з інпуту створює сторінку додає лічильник сторінки відобража кнопку додавання інших сторінок 
+gettingUserForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    btnMorePosts.style.display = 'none';
+    pageGrowthJs = 1;
+    inputSearchListener = event.currentTarget.elements.search.value.toLowerCase().trim();
+    
+      if (!inputSearchListener) {
+        return
+    };
+    addImage(inputSearchListener, pageGrowthJs, event); 
+    pageGrowthJs++;
+    btnMorePosts.style.display = 'block';
+});
+
+//слухач для кнопки додає лічильник сторінки по значенню з інпута шука наступну сторінку
+btnMorePosts.addEventListener("click", (event) => {
+    pageGrowthJs++;
+    
+      if (!inputSearchListener) {
+        return
+    };
+    addImage(inputSearchListener, pageGrowthJs); 
+    
 });
