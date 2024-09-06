@@ -5,8 +5,6 @@ import "izitoast/dist/css/iziToast.min.css";
 //simplelightbox ДЛЯ відтворення великих картинок https://www.npmjs.com/package/simplelightbox
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-// підключення бібліотеки axios https://axios-http.com/docs/intro
-import axios from 'axios';
 
 //імпорт з сусідніх файлів дж ес
 import { gettingData } from './js/pixabay-api.js';
@@ -39,14 +37,14 @@ loader.style.display = 'none';
 btnMorePosts.style.display = 'none';
 loaderMore.style.display = 'none';
 
-// створення вигляду для бібліотеки що відкрива картинки                  
+// створення вигляду для бібліотеки що відкривань картинки                  
 let gallery = new SimpleLightbox('.galleryEl a', {
                     caption: true,
                     captionDelay: 250,
                     captionsData: 'alt',
                     });
 
-//2 функія для отримання фото
+// функія для отримання фото
 const gettingUserForm = document.querySelector("form");
 const userList = document.querySelector(".galleryEl");
 let pageGrowthJs = 1;
@@ -199,13 +197,14 @@ gettingUserForm.addEventListener("submit", (event) => {
 });
 
 //слухач для кнопки додає лічильник сторінки по значенню з інпута шука наступну сторінку
-btnMorePosts.addEventListener("click", (event) => {
+//обовязково додати async await щоб виконувалось після відмальовки картинок
+btnMorePosts.addEventListener("click", async(event) => {
     pageGrowthJs++;
     
       if (!inputSearchListener) {
         return
     };
-    addImage(inputSearchListener, pageGrowthJs); 
+    await addImage(inputSearchListener, pageGrowthJs); 
     // ==============================================================
             //    ?????????????????????НЕСПРАЦЬОВУЄ ПРОКРУТКА???????????????????????????
                     const elem = document.querySelector(".gallery-list-item");
