@@ -10,8 +10,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import { gettingData } from './js/pixabay-api.js';
 import { renderData } from './js/render-functions.js';
 //ВСТАВКА ШЛЯХУ ДЛЯ ІЗІТОСТ ЩОБ РОБИЛА
-import clipPath from "./img/octagon.svg"
-
+import pathImg from "./img/octagon.svg";
 
 
 
@@ -70,7 +69,7 @@ async function addImage(InputSearch, pageGrowthJs, eventCome) {
                 messageLineHeight: "20px",
                 backgroundColor: "rgb(255,153,102)",
                 position: "topRight", 
-                image: clipPath,
+                image: pathImg,
                 imageWidth: 30,
                  });
                  // добавити скруглення для iziToast
