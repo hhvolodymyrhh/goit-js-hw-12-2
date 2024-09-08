@@ -10,7 +10,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import { gettingData } from './js/pixabay-api.js';
 import { renderData } from './js/render-functions.js';
 //ВСТАВКА ШЛЯХУ ДЛЯ ІЗІТОСТ ЩОБ РОБИЛА
-import pathImg from "./img/octagon.svg";
+import pathImg from "./img/octagon.svg""
 
 
 
